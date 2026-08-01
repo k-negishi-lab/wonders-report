@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>WONDERS 月報アーカイブ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12233F;
+  --ink-soft:#3A4557;
+  --paper:#EEF0EA;
+  --card:#FCFCFA;
+  --line:#CDD2C8;
+  --gold:#B4841F;
+  --green:#2E6B57;
+  --rust:#A8442A;
+  --mincho:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --gothic:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP","Segoe UI",sans-serif;
+  --mono:ui-monospace,"SFMono-Regular","Roboto Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--gothic);font-size:15px;line-height:1.85;font-feature-settings:"palt"}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+.hidden{display:none}
+
+/* ---------- header ---------- */
+header{border-bottom:1px solid var(--line);padding:40px 0 0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--gold);margin:0 0 10px}
+h1{font-family:var(--mincho);font-weight:700;font-size:clamp(25px,5vw,36px);line-height:1.35;margin:0 0 12px;letter-spacing:.02em}
+.lede{max-width:60ch;color:var(--ink-soft);margin:0 0 32px;font-size:14px}
+
+/* ---------- mode tabs ---------- */
+nav.modes{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);border-top:1px solid var(--line)}
+.modes-inner{display:flex;gap:2px}
+.mode{background:none;border:0;border-bottom:2px solid transparent;padding:14px 18px;font:inherit;font-size:14px;color:var(--ink-soft);cursor:pointer}
+.mode[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--gold);font-weight:700}
+.mode:focus-visible{outline:2px solid var(--gold);outline-offset:-4px}
+
+/* ---------- selectors (signature: 背表紙) ---------- */
+.spine{border-bottom:1px solid var(--line);padding:22px 0 20px}
+.spine-title{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--ink-soft);margin:0 0 14px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font:inherit;font-size:13.5px;padding:7px 15px;border:1px solid var(--line);background:var(--card);
+  color:var(--ink-soft);border-radius:2px;cursor:pointer;white-space:nowrap}
+.pill:hover{border-color:var(--gold);color:var(--gold)}
+.pill[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:700}
+.pill .n{font-family:var(--mono);font-size:11px;opacity:.65;margin-left:7px}
+.pill:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* ---------- toolbar ---------- */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:24px 0 4px}
+input[type=search]{flex:1 1 240px;min-width:0;padding:10px 13px;font:inherit;font-size:14px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:2px}
+input[type=search]:focus{outline:2px solid var(--gold);outline-offset:-1px}
+.ghost{padding:10px 14px;font:inherit;font-size:13px;background:none;border:1px solid var(--line);
+  border-radius:2px;color:var(--ink-soft);cursor:pointer}
+.ghost:hover{border-color:var(--gold);color:var(--gold)}
+.count{font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+main{padding-bottom:80px}
+
+/* ---------- cards ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:2px;margin:14px 0}
+.card > summary{list-style:none;cursor:pointer;padding:20px 22px;display:block}
+.card > summary::-webkit-details-marker{display:none}
+.card > summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.head{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+.name{font-family:var(--mincho);font-weight:700;font-size:21px;letter-spacing:.02em}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;border:1px solid var(--gold);
+  color:var(--gold);padding:2px 9px;border-radius:99px}
+.biz{color:var(--ink-soft);font-size:13.5px;margin:6px 0 0}
+.kpis{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.kpi{border:1px solid var(--line);border-radius:2px;padding:6px 10px;line-height:1.3}
+.kpi b{display:block;font-family:var(--mono);font-size:14px;font-weight:600}
+.kpi span{font-size:10.5px;color:var(--ink-soft);letter-spacing:.04em}
+.kpi.ok{border-color:var(--green)} .kpi.ok b{color:var(--green)}
+.kpi.warn{border-color:var(--rust)} .kpi.warn b{color:var(--rust)}
+.more{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.1em;margin-top:14px;display:block}
+.card[open] .more::after{content:"閉じる ▲"}
+.card:not([open]) .more::after{content:"報告とFBを読む ▼"}
+.body{padding:0 22px 24px;border-top:1px solid var(--line);margin-top:4px}
+.block{padding-top:20px}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--gold);margin:0 0 8px}
+.block p{margin:0 0 8px}
+.block ul{margin:0;padding-left:1.15em}
+.block li{margin-bottom:7px}
+.fb{background:#F4F5F0;border-left:3px solid var(--ink);padding:18px 20px;margin-top:20px}
+.fb .label{color:var(--ink)}
+.note{font-size:13px;color:var(--ink-soft);border-top:1px dashed var(--line);margin-top:14px;padding-top:12px}
+.empty{border:1px dashed var(--line);padding:28px 22px;color:var(--ink-soft);font-size:14px;margin-top:14px}
+
+/* ---------- person timeline ---------- */
+.person-head{padding:26px 0 6px}
+.person-head h2{font-family:var(--mincho);font-size:26px;margin:0 0 4px;font-weight:700}
+.person-head p{margin:0;color:var(--ink-soft);font-size:13.5px}
+.timeline{border-left:1px solid var(--line);margin-left:7px;padding-left:22px;margin-top:18px}
+.tl-item{position:relative}
+.tl-item::before{content:"";position:absolute;left:-27px;top:22px;width:11px;height:11px;
+  border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px var(--paper)}
+.tl-month{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--ink-soft);padding-top:14px}
+
+/* ---------- extras (themes / bench) ---------- */
+.fold{border-top:1px solid var(--line);margin-top:36px}
+.fold > summary{list-style:none;cursor:pointer;padding:20px 0;font-family:var(--mincho);
+  font-size:19px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.fold > summary::-webkit-details-marker{display:none}
+.fold > summary::after{content:"開く ▼";font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.1em}
+.fold[open] > summary::after{content:"閉じる ▲"}
+.theme{border-top:1px solid var(--line);padding:20px 0;display:grid;grid-template-columns:44px 1fr;gap:0 18px}
+.theme-no{font-family:var(--mono);font-size:20px;color:var(--gold);line-height:1.4}
+.theme h3{font-family:var(--mincho);font-size:17px;margin:0 0 6px;font-weight:700}
+.theme p{margin:0 0 8px}
+.who{font-size:12px;color:var(--ink-soft);font-family:var(--mono)}
+.bench{width:100%;border-collapse:collapse;font-size:14px}
+.bench th{text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-soft);
+  font-weight:400;border-bottom:1px solid var(--ink);padding:8px 12px 8px 0}
+.bench td{border-bottom:1px solid var(--line);padding:14px 12px 14px 0;vertical-align:top}
+.bench td:first-child{white-space:nowrap;font-size:12.5px;color:var(--gold);font-family:var(--mono)}
+footer{border-top:1px solid var(--line);padding:24px 0 60px;font-size:12px;color:var(--ink-soft)}
+
+@media(max-width:720px){
+  .bench td:first-child{white-space:normal}
+  .theme{grid-template-columns:1fr}
+  .theme-no{font-size:14px}
+  .timeline{padding-left:16px}
+}
+@media(prefers-reduced-motion:no-preference){
+  .card[open] .body{animation:reveal .22s ease-out}
+  @keyframes reveal{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <p class="eyebrow">WONDERS / MONTHLY REPORT</p>
+  <h1>月報アーカイブ</h1>
+  <p class="lede">メンバーの月報と、ひらちさんからのフィードバックを保管しています。月でまとめて読むか、一人分を時系列で追うかを切り替えられます。</p>
+</header>
+
+<nav class="modes">
+  <div class="wrap modes-inner" role="tablist">
+    <button class="mode" role="tab" aria-selected="true"  data-mode="month">月で見る</button>
+    <button class="mode" role="tab" aria-selected="false" data-mode="person">人で見る</button>
+  </div>
+</nav>
+
+<div class="wrap spine">
+  <p class="spine-title" id="spineTitle">月を選ぶ</p>
+  <div class="pills" id="spine"></div>
+</div>
+
+<main class="wrap">
+  <div class="toolbar">
+    <input type="search" id="q" placeholder="名前・事業・キーワードで絞り込む" aria-label="絞り込み">
+    <button class="ghost" id="toggleAll">すべて開く</button>
+    <span class="count" id="count"></span>
+  </div>
+  <div id="view"></div>
+</main>
+
+<footer class="wrap"><p>WONDERS 月報アーカイブ</p></footer>
+
+<script>
+/* =============================================================
+   更新するのはここだけ。
+   新しい月は MONTHS の先頭に 1 ブロック追加すれば反映されます。
+   ============================================================= */
+const MONTHS = [
+{
+id:"2026-07", label:"2026年7月",
+
+members:[
+{
+  name:"なおみ",
+  biz:"TikTokライブ配信での婚活・恋愛コンサル（オンライン事業）",
+  kpis:[{v:"¥698,000",l:"売上",s:"ok"},{v:"1件",l:"成約",s:"ok"},{v:"5件",l:"リストイン",s:"warn"},{v:"投稿12/ライブ13",l:"行動目標 達成",s:"ok"}],
+  goal:"1年後、オンライン事業で月収200万円",
+  report:[
+    "行動設定は週3投稿・週3ライブ。実績は投稿12回・ライブ13回で達成。",
+    "個別相談からの成約率71%。相談者の約60%がライブ配信経由で、ライブ経由の成約率は100%。",
+    "課題は、成約率に対してリストイン（LINE登録）が非常に少ないこと。オファーの再設計と、登録前に診断チェックを挟むテストを検討中。"
+  ],
+  fb:[
+    "行動設定と実績が噛み合っていて素晴らしい。フォロワー数やリストイン数のような自分でコントロールできない数字を行動目標に置いていないのがGood。",
+    "ライブ経由の成約率が高いという分析も的確。直接やり取りができて人柄が伝わるライブは強力。",
+    "課題の見立ては完全に合っている。今は動画から公式LINEに入る割合がほぼない状態。「動画とライブで価値提供の何が違うのか」「ライブではなぜ入ってくれるのか」を問い続けることが大事。",
+    "特典は、個別相談に来た人が一番気にしている悩みを解決する“攻略系”に。時間をかけて作って外さないよう、お客様の声と喜ばれた実績から作る。相談会に来る人の属性・年齢層・悩みの共通項を分析すると、バチッとハマる特典が見つかる。",
+    "診断シートの導入は賛成。ただし「動画で学ぶハードルが高い」のが原因とは限らない。人は本当に欲しい情報なら見る。市場が求める訴求とズレているか、中身に興味を持たれず離脱している可能性の方が高い。",
+    "勝負をかけるライブの時は、LINEリスト全体に呼びかけるのも施策としてあり。",
+    "TikTokでショートを作ったなら、ついでにInstagram・Facebookにも投稿する仕組みを。"
+  ],
+  next:["過去の個別相談者の悩みから攻略系特典を再設計","基準値（1本目60%・2本目50%・相談移行10〜15%）で計測と改善","勝負ライブ時にLINE全リストへ告知","TikTok動画をInstagram・Facebookリールへ横展開"]
+},
+{
+  name:"すみちゃん",
+  biz:"講座事業（今月から参加、モニター募集フェーズ）",
+  kpis:[{v:"2名",l:"モニター獲得",s:"ok"},{v:"8/6",l:"モニター開始"},{v:"0円",l:"売上"}],
+  goal:"10月から通常価格で販売できる状態にする",
+  report:[
+    "今月から講座に参加し、まずモニター募集に取り組んで2名を獲得。8月6日からスタート。",
+    "現在は教材と進行内容を作り込み中。モニター期間中に受講者の声を集めてサービスをブラッシュアップする方針。",
+    "8月末にもう1名、9月に安価なモニターを追加募集し、10月からサブスクの仕組みを整えて通常価格での展開を目指す。"
+  ],
+  fb:[
+    "今は0→1のフェーズが終わったあたり。方向性は全く間違っていない。これからは再現性を見つけて、商品の形態と単価を決めていく段階。",
+    "❶集客の再現性 — どの経路でモニターを獲得できたか。1人取れたなら、その数を100人にするには何が必要かを振り返って分析する。",
+    "❷成果の再現性【最重要】— モニターにどんな未来を約束できるか。「無料でもいいからやるよ〜」の姿勢だと相手が本気にならない。自分が先生、あなたが生徒という位置付けを明確に共有して本気でサポートする。",
+    "❸セールスの再現性 — どんなセールスをしたから「気になる」と言ってもらえたのか。100%はないが、打率は容易に上げられる。",
+    "❹商品単価・形態の決定 — おすすめは個別コンサル。最も結果が出るから。単価は市場の似た商品をリサーチして妥当な範囲を決める。気持ちが大きくなって高く設定しがちだが、許容範囲は市場が決める。",
+    "❺ノウハウの言語化 — 1対Nで展開する時に必ず必要。教科書がないと全ての質問が自分に集まり、スケールできない。",
+    "❻下に伝えること — 小さくてもいいので、自分のような状態になりたい人へ教える場を設ける。"
+  ],
+  next:["モニター2名に全力で向き合いながら、集客・成果・セールスの再現性を言語化する"],
+  note:"月報はスプレッドシートのリンクではなく、Discordに直接記載を推奨（全員が読めて勉強になり、添削もしやすいため）。"
+},
+{
+  name:"早川茜",
+  biz:"暦ラボ講座／コンサル／SNSブランド／It's Me／海外展開の5事業",
+  kpis:[{v:"3名",l:"3Days申込"},{v:"2件",l:"鑑定申込",s:"ok"},{v:"10名",l:"Voicy経由LINE流入"},{v:"1名",l:"ナビセッション実施",s:"warn"}],
+  goal:"1年後、講座事業で年間1,540万円（44万×35人）",
+  report:[
+    "フロントを3Daysチャレンジから個別のナビゲーションセッションへ移行を検討中。ここ半年、3Daysの集まりが落ちているため。実施は1名で、値段が折り合わず。",
+    "岡崎かつひろ氏のVoicy出演でLINEへ10名流入したが、新しく組んだステップが稼働しておらず個別セッションに繋がらなかった。誤設定から3Daysの申込が2件入り、現在3名で8/5-7に実施予定。",
+    "Zoomで話した方から鑑定2件の申込。基準を上げすぎると動けなくなるため、妥当性のある期待をすることを意識している。"
+  ],
+  fb:[
+    "5つの事業を展開しているなら、絞ることが大事。ほとんどの人にとって複数事業でそれぞれ結果を出すのは難しく、どれも中途半端になりがち。初期のフェーズなら尚更、勇気を出してコンテンツを絞る。",
+    "絞り方のポイントは「自分のしたいこと」ではなく「お客様から求められているもの」。もっとシビアに言えば「一番収益につながっているもの」。",
+    "ビジネスは自分らしさや本当にしたいことを追求するのではなく、お客さんや見込み客が求める自分を演出しなければいけない。人はいくつもの仮面を持っていて、その時々で使い分ける必要がある。誰のために自分らしさを出す必要があるのか、もう一度問いかけてみてほしい。",
+    "全体を俯瞰するとキャパオーバー。「やらないこと」を決めない限り、売上目標の達成は難しい。",
+    "他人のアカウントからのリストイン増は、下駄を履かせてもらっている状態で長期的な資産になりにくい。特定の分野で「100人に声をかけたら自分が一番」になるくらい、脇目を振らず一点突破する必要がある。",
+    "基準値は上げた方がいい。人は自分の意思で決める時、ほぼ100%楽な道を選ぶ。基準値は「誰かのために頑張ろう」と思った時に自然と上がるもの。「このくらいで自分がパンクする」は、行動の目的が自分になっている可能性が高い。",
+    "打破するために大切なのは一人でしないこと。誰かと約束をして、その約束を破らないように行動して信頼を稼ぎ続ける。一緒に頑張る人はもう決まっているか。"
+  ],
+  next:["売上に最もつながるものにやることを絞る","1→10のどの再現性ができていないかを把握する（おそらく集客の再現性が未言語化）","絞った1本のコンテンツで月間投稿本数を決め、確認してくれる相手と日程まで決める"]
+},
+{
+  name:"栗原舞子",
+  biz:"養成講座・継続講座（YouTube＋エバーグリーン導線／単価88万円）",
+  kpis:[{v:"88万円",l:"累計売上"},{v:"1件 / 目標2件",l:"成約（成約率100%）",s:"ok"},{v:"15 / 20",l:"LINE登録",s:"warn"},{v:"1件 / 8件",l:"個別相談",s:"warn"},{v:"1本 / 2本",l:"YouTube投稿",s:"warn"}],
+  goal:"1年後、月商200万円（養成2名・継続2名＋その他）",
+  report:[
+    "Facebook・Threads・Instagram・LINE配信は計画通り実行。YouTubeは目標2本に対して1本。",
+    "LP・UTAGE・LINEステップ配信・無料セッション導線が完成し、累計売上88万円。",
+    "この3ヶ月は「作る」期間だったので、次の3ヶ月は集客データを集める期間にする。"
+  ],
+  fb:[
+    "KPIを置いて数字で管理できているのが素晴らしい。15人リストインして1人成約はかなり強力で、100人なら6〜7人成約の計算。単価88万円ならリスト単価5万円も狙える状態。",
+    "自分で立てた行動目標をクリアし続けること。これは簡単そうで非常にハードルが高い。",
+    "ただしYouTubeが4本予定に対して1本なら、そこをどう捉えるかがすごく大事。一度このタイプのミスをすると「今回はやめてもいいや」という癖が必ずつく。自分の行動でコントロールできるところは絶対に破らない。目標はファッションのように立てるのではなく、絶対に完遂する今月の自分の仕事として認識する。",
+    "今の課題はリストインの数。最もリストインが来る媒体はどこか、なぜ自分を選んでくれたのかをヒアリングして、その魅力を発信に混ぜていく。",
+    "成果の再現性も確認しておきたい。リストインが増えた時に、どの属性なら結果が出るのか、取るべき人と取らない方がいい人が見えてくるはず。",
+    "「下に伝えること」を並行して進められるといい。少ないリストインで結果に繋げている人は多くないし、YouTubeに何を投稿すればいいか見えていない人も多い。口コミや新たな事業の種ができ、バックエンドにつながることも少なくない。リアルが難しければライブ配信やクローズドなZoom勉強会でも可。"
+  ],
+  next:["リストインを増やす施策の特定","勉強会・セミナー・ライブ配信への着手（これまで避けてきた領域）"],
+  note:"本人補足：YouTubeは8月から編集者と月4本の契約済み。今月分はローンチ動画をYouTube用に再編集したもの。"
+},
+{
+  name:"松田磨帆",
+  biz:"インフルエンサーキャスティングによる美容・脱毛サロン集客",
+  kpis:[{v:"シート提出",l:"数値は未確認",s:"warn"}],
+  goal:"1年後、個人売上400万円",
+  report:["Googleスプレッドシートで提出（Discordへの直接記載を推奨）。"],
+  fb:[
+    "目標を決めてやり切る力がすごく強い。自分がやると決めたことを継続できるのは本当にすごいこと。",
+    "それと並行して、分析する力を徐々に養っていく段階。行動の結果出てきた数字がどんな意味を持つのかを逆算し、「この数字ならOKだな」と自分で判断できる力を身につけることがとても大切。",
+    "例えば、DM100件送信 → 返信10件（10%）→ そのうち50%が契約（5件）→ 1件あたり平均100万円なら500万円。この計算ができれば目標達成の可否がその場で判断できる。",
+    "把握すべきは4つ。①DMの返信率 ②インフルエンサーとの契約率 ③インフルエンサーが連れてくるお客様の数（平均）④来店客の成約率。この4つで売上は完全に科学できる。",
+    "全体を俯瞰できる立場だからこそ、刺さる文面をインフルエンサーへ提案する引き出しを持っておく。Aさんの投稿で10人来店、Bさんで1人ならAの良かったポイントを抽出して応用する。契約数が乱高下せず安定する。",
+    "ここまで数値化できれば、直営店を増やしたりFC展開したり、困っているサロンへ導入提案できる最強の武器になる。",
+    "並行して勉強会（情報共有の場）作りを。他店をライバルではなく一緒に業界を盛り上げる仲間と捉えると、後々すごく効いてくる。"
+  ],
+  next:["4指標（DM返信率・契約率・平均送客数・来店成約率）の把握を今月のアクションプランに","勉強会・情報共有の場づくり"]
+},
+{
+  name:"會澤一成",
+  biz:"外国人（ネパール人）向け不動産の賃貸・売買仲介／複業",
+  kpis:[{v:"238人",l:"Instagramフォロワー"},{v:"2件",l:"DM受信"},{v:"7/1",l:"アカウント開設"}],
+  goal:"1年後に月収30万円（最終目標100万円）",
+  report:[
+    "7月1日にInstagramアカウントを開設し、毎日運用。フォロワー238人、DM2件のうち1件は不動産仲介会社と繋がれた。",
+    "外国人OK物件が不足しているため、SNSで物件を集めて借りたい人に紹介する流れを作りたい。",
+    "闇雲にフォロワーを増やしても意味がないので、DMが来る仕掛けを作りたい。1ヶ月どう動いて2・3ヶ月目に繋げればよいか知りたい。"
+  ],
+  fb:[
+    "まず大切にしてほしいのは「自分はどう思い、どう動こうと考えているか」という視点。「僕ならこう動く」と答えを伝えるのは簡単だが、まず動いてみて、その結果出てきた課題や自分の意見に対してFBを返したい。",
+    "みなさんをイエスマンや指示通り動くワーカーにしたいわけではなく、一人ひとりがリーダーになったり、リーダーを高いレベルで支えられる人に成長してほしいから。",
+    "1ヶ月動けば数字が動く。1件成約できたなら「なぜ成約できたのか」「どんなメッセージを送ったのか」「何が決め手だったのか」「なぜ自分に返事をくれたのか」の深掘りが必要。",
+    "この考察があって初めて「これが良かったのかも」「次はこうしよう」「XやFacebookでも展開できるのでは」という仮説が生まれ、次の実践に入れる。",
+    "今は0→1の大量行動フェーズ。大量に動いて振り返った時に、答えとなる糸口が掴める。",
+    "結果が出ない原因は2つしかない。①そもそも行動しなかった ②行動したことを分析せず、効率の悪い行動をずっと続けた。それだけ。",
+    "振り返り方に悩む時は、周りを巻き込んで一緒に考えること。"
+  ],
+  next:["1ヶ月間の行動を一つひとつ丁寧に紐解き、仮説を立てる訓練をする"]
+},
+{
+  name:"原田栄一（ゆうや）",
+  biz:"Instagram中心のオリジナル商品づくり／モニター獲得",
+  kpis:[{v:"27件",l:"ストーリーズ"},{v:"10件",l:"フィード"},{v:"2回",l:"インスタライブ"},{v:"+134人",l:"フォロワー増"}],
+  goal:"1年後、副業のオンライン事業で月収20万円",
+  report:[
+    "今月から入会。年内は収入にこだわらず実績を出すことに専念する方針。",
+    "課題は、入会がゴールになって行動力が落ちたこと。マルチタスクが苦手でタスクが整理できず、モニターのロードマップ作成に3週間かけてまだ完成していない。",
+    "改善策として、毎日Discordに予定を送る／DMは当日中に返信する／商品の企画書を落とし込む／とにかく楽しんでやる。"
+  ],
+  fb:[
+    "まずは1年間「絶対にやりきる」こと。そこで初めてデータが溜まり、「自分ならこれくらいの力を出せる」「このくらいの目標を立てられる」という自分の基準が見えてくる。",
+    "行動力を落とさないために一番大切なのは「誰かと一緒にやる」こと。気分が沈んだり結果が出ない時は、一人で抱え込んでいることが多い。",
+    "例えばUber Eatsを1人で1日8時間・30日続けるのは大変だが、3人で「昼に集合してご飯を食べよう。それまでに何件届けられるか勝負しよう」とやるとゲーム性が生まれて楽しく続く。お互いの信頼も深まる。",
+    "今月の最優先は【モニターのロードマップ完成と共有】。週1のライブも毎日の投稿も、すべて「その一人のお客さまのため」にやるイメージ。モニターが来てくれたのは、明確な価値を感じてくれたから。",
+    "感情と行動を切り離し、「誰かのためにやる」意識を持つ。自分のためではなく誰かの役に立っていると実感できている時は、自然と自分を鼓舞できる。",
+    "絶対に孤独にならないこと（会員サイトの「折れない心の作り方」を必ず見てほしい）。行き詰まったら根岸くんやひらちに気軽に話しかけてほしい。一人でやっている感覚がなくなるだけで行動のスピードは一気に上がる。",
+    "ここからのポイントは「量とブラッシュアップ」。フィード10本・ライブ2回が本当に精一杯だったかを振り返る。ただ作業量を増やす話ではなく、誰のためにやるのかが重要。",
+    "「一人ひとりに真摯に向き合う」をファッションで言わず本気でやること。モニターとの向き合い方が、今後の事業すべての土台になる。"
+  ],
+  next:["モニターのロードマップを完成させて共有する","一緒に取り組む相手を決めて約束をつくる","DMは最低でも当日中に返信する"]
+},
+{
+  name:"Kossi（オコシ）",
+  biz:"ダイエットの個別コンサル（98,000円）",
+  kpis:[{v:"2名",l:"モニター獲得",s:"ok"},{v:"週2回",l:"TikTok投稿"},{v:"78.4万円",l:"1年後の目標月収"}],
+  goal:"1年後、個別コンサル8名で月収78.4万円",
+  report:[
+    "今月モニターを2名獲得。向き合う中で想定外のことも多く、つまずきの連続だったが小さな成功体験になった。",
+    "毎日の食事・睡眠・運動・体重の報告をもらいデータを取りながらサポート。TikTok週2投稿とライブ配信、交流会でのモニター獲得を継続する。"
+  ],
+  fb:[
+    "いつの間にかモニターを2人も獲得していて素晴らしい。「それぞれのモニターを全力でサポートしたい」という言葉に、今やるべきことがすべて集約されている。",
+    "今のフェーズはまさに「再現性を確認するフェーズ」。この期間で確立・定義していくのは、集客の再現性／セールスの再現性／成果の再現性／肩書きの決定／発信内容の明確化／商品単価・提供形態の設定／ノウハウを言語化して下に伝えること。",
+    "これらの変数を確定させるからこそ、モニターへの向き合い方が何よりも大切。ここで中途半端に向き合うと、将来事業を大きくする基盤が作れない。「必ず結果を出させる」という覚悟を持つ。",
+    "月1回や週1回の表面的な関わりでは相手も本気になりにくい。無料・低単価だからこそ、それを上回る自分の熱量・想い・ミッション・ビジョンを届けてほしい。「そこまで言うなら3ヶ月本気で頑張るわ」と思わせる向き合い方をして、実際に成果を出させてあげる。",
+    "今はまだ収入に直接つながりにくく辛い時期。ただ一人ひとりと泥臭く向き合う中で、将来の大きな事業基盤が作られていく。"
+  ],
+  next:["モニター2名に全力で向き合いながら、上記の変数を一つずつ埋めていく","ショート動画・ライブ配信・交流会で具体的な数字を決めて行動する"]
+},
+{
+  name:"土屋瑛嵩",
+  biz:"創業50年のわさび関連事業（家業・従業員7名／BtoB）",
+  kpis:[{v:"2件→1件",l:"交流会参加→接続",s:"ok"},{v:"1件",l:"DM返信"},{v:"1件",l:"サンプル送付"}],
+  goal:"1年後、取引先10社増／Instagramフォロワー6,000人",
+  report:[
+    "目標は従業員7名とそのご家族のために設定。フォロワー数は当町のおおよその人口を基準にした。",
+    "自社商品全体で考えていたが、具体的に何を販売したいかを明確にして見込み客へアプローチ。交流会に2件参加し、1件の方と繋がった。",
+    "InstagramのDMから1件返信があり、サンプルを送付。来月はフィード投稿を積極的に行う予定。"
+  ],
+  fb:[
+    "「7人の従業員さんとそのご家族のために設定した」という言葉が本当に素敵。ビジネスを人を主軸にして考えている姿勢が素晴らしい。",
+    "もし未実施なら、社員さん一人ひとりと定期的に直接会話をしてほしい。社長交代のタイミングで「2代目だから」と斜めに見られたり距離を置かれるのはよくある課題。今のうちから感謝を伝え、好かれる関係性を作っておくことが大切。",
+    "特に現場を取り仕切るキーパーソンには、上からではなく「いつもありがとうございます。色々教えてくださいね」という謙虚な姿勢で接し、あらかじめ味方になってもらう。",
+    "DMでアプローチしていくなら、アカウント全体の景観が重要。相手がプロフィールに飛んだ時、トップの9投稿で「ちゃんとした信頼できる会社だ」と思わせる工夫が必要。",
+    "発信内容は、わさびの品質／社長自身の想いと栽培のノウハウ／お客様の声と選ばれている理由／現場で働く従業員さんの姿勢。透明性を出すこと。BtoBの企業が見た時に安心できるコンテンツを意識する。",
+    "サンプルを受け取ってくれた方には丁寧なヒアリングを。「なぜ興味を持ったのか」「なぜ自社のわさびを選んでくれたのか」を聞くと、自分では気づけなかった客観的な強みが見えてくる。その声をフィード投稿に還元するとアカウントの質が上がる。",
+    "交流会も「行けば必ず1人繋がれる」状態が作れれば、参加するほど右肩上がりに販路が広がる。不安な時は仲間に協力してもらい、相手が大変な時には手を差し伸べる。助け合える関係値がビジネスを長く続けるコツ。"
+  ],
+  next:["従業員とのコミュニケーションを挨拶以外にも広げる","Instagramのトップ9投稿を整える","サンプル送付先と既存取引先に選定理由をヒアリングする","来月も交流会に参加し、フィード投稿を積極化する"]
+}
+],
+
+themes:[
+ ["行動目標はコントロールできる数字で置く","フォロワー数やリストイン数など自分でコントロールできない数字は、達成していなくてもまず大丈夫。「自分で決めたことをちゃんとできているか」が一番大切。","なおみ / 栗原舞子"],
+ ["自分で立てた目標は絶対に破らない","一度「今回はやめてもいいや」を許すと必ず癖になる。小さな綻びがとてつもなく大きな綻びに変わる。目標はファッションのように立てるのではなく、絶対に完遂する今月の自分の仕事として認識する。","栗原舞子 / 早川茜"],
+ ["1→10は4つの再現性を埋める作業","①集客の再現性（どの経路で獲得したか／1人を100人にするには）②成果の再現性（どんな未来を約束し、確実に結果を出させるか）③セールスの再現性（なぜ欲しいと言ってもらえたか）④商品単価・形態の決定（おすすめは個別コンサル、単価は市場リサーチから）。","すみちゃん / Kossi / 早川茜"],
+ ["モニターには「先生と生徒」で本気で向き合う","「無料でもいいからやるよ〜」の姿勢だと相手が本気にならない。明確な位置付けを共有して指導する。無料・低単価だからこそ、それを上回る熱量・想い・ミッションを届ける。この向き合い方が事業すべての土台になる。","すみちゃん / Kossi / 原田栄一"],
+ ["事業・コンテンツは絞る","初期フェーズで複数事業はどれも中途半端になる。絞る軸は「自分のしたいこと」ではなく「お客様から求められているもの」＝一番収益につながっているもの。「やらないこと」を決めない限り目標達成は難しい。","早川茜"],
+ ["ビジネスは“演出”である","自分らしさや本当にしたいことの追求ではなく、お客さんや見込み客が求める自分を演出すること。人は誰でも複数の仮面を持ち、その時々で使い分ける必要がある。","早川茜"],
+ ["絶対に一人でやらない","気分が沈んだり結果が出ない時は一人で抱え込んでいることが多い。誰かと約束を交わし、それを破らないように動くことで信頼が貯まり、モチベーションに左右されなくなる。レベルの高い環境にいれば、それが自然と自分の基準値になる。","早川茜 / 原田栄一 / 會澤一成"],
+ ["売上を数字で科学する","行動の結果出てきた数字が何を意味するかを逆算し、「この数字ならOKだな」と自分で判断できる力を持つ。各率を把握できれば「◯件動けばこれくらいの売上になる」とスラスラ言えるようになる。","松田磨帆 / なおみ / 栗原舞子"],
+ ["訴求・特典はお客様の声から作る","時間をかけて作ったのに外した、とならないために、お客様の声や実際に喜ばれた実績から作る。相談会に来る人の属性・年齢層・悩みの共通項を分析すると、バチッとハマる訴求が見つかる。","なおみ / 土屋瑛嵩"],
+ ["「下に伝えること」を並行する","小さな勉強会でもいいので、自分のような状態になりたい人へ教える場を設ける。口コミや新たな事業の種が生まれ、バックエンドにつながることも少なくない。リアルが難しければライブ配信やクローズドZoomでも可。","すみちゃん / 栗原舞子 / 松田磨帆"],
+ ["ノウハウは言語化しておく","1対Nの講座形式で展開する時に必ず必要になる。教科書がないと全ての質問が自分に集まり、スケールできない。慣れないうちは骨が折れるが必ず慣れる。","すみちゃん / Kossi"],
+ ["他人の力による流入は長続きしない","他人のアカウントからのリストイン増は下駄を履かせてもらっている状態で、長期的な資産になりにくい。特定の分野で「100人に声をかけたら自分が一番」になるまで一点突破する。","早川茜"],
+ ["結果が出ない原因は2つだけ","①そもそも行動しなかった ②行動したことを分析せず、効率の悪い行動をずっと続けた。このどちらかしかない。","會澤一成"],
+ ["答えは渡さず、まず自分の見立てを持つ","イエスマンや指示通り動くワーカーではなく、一人ひとりがリーダーになれるように育てたい。だからまず自分で動き、その結果の課題や自分の意見に対してFBを返す方針。","會澤一成"],
+ ["月報はシートではなく直接記載","スプレッドシートのリンクではなく本文に直接記載した方が、他のメンバーにも見やすく勉強になり、添削もしやすい。","すみちゃん / 松田磨帆"]
+],
+
+bench:[
+ ["LINE導線","1本目のローンチ動画の視聴率","リストイン数に対して60〜70%見られていれば、特典の興味付けは◎"],
+ ["LINE導線","2本目の動画の視聴率","1本目の視聴者に対して50%以上あれば、動画の中身の惹きつけも良い（例：100リストイン→1本目60人→2本目30人）"],
+ ["LINE導線","無料個別相談会への移行率","リストイン100人に対して10〜15名がOKライン"],
+ ["LINE導線","動画が見られない時の解釈","「学ぶハードルが高い」のではなく、市場が求める訴求とズレているか、中身に興味を持たれず離脱している可能性が高い"],
+ ["成約","リスト単価","15人リストインで1成約・単価88万円なら、100リストで6〜7成約＝リスト単価5万円も狙える水準"],
+ ["キャスティング営業","把握すべき4指標","①DM返信率 ②インフルエンサーとの契約率 ③インフルエンサーが連れてくる客数の平均 ④来店客の成約率。この4つで売上は完全に科学できる"],
+ ["キャスティング営業","モデルケース","DM100件送信 → 返信10件（10%）→ 50%が契約（5件）→ 1件平均100万円なら500万円"],
+ ["フェーズ判定","0→1の完了ライン","初めてモニターが取れた／初めて個別相談会に人が来た状態。ここから1→10の変数埋めに入る"]
+]
+}
+];
+
+/* ============================ 以下は変更不要 ============================ */
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+const PEOPLE = [];
+MONTHS.forEach(mo => mo.members.forEach(m => { if(!PEOPLE.includes(m.name)) PEOPLE.push(m.name); }));
+const monthCount = name => MONTHS.filter(mo => mo.members.some(m => m.name === name)).length;
+
+let mode = "month";
+let curMonth = MONTHS[0].id;
+let curPerson = PEOPLE[0];
+
+function cardHTML(m, monthLabel){
+  return `
+<details class="card">
+  <summary>
+    <div class="head">
+      <span class="name">${esc(m.name)}</span>
+      ${monthLabel ? `<span class="tag">${esc(monthLabel)}</span>` : ""}
+    </div>
+    <p class="biz">${esc(m.biz)}</p>
+    <div class="kpis">${(m.kpis||[]).map(k=>`<div class="kpi ${k.s||''}"><b>${esc(k.v)}</b><span>${esc(k.l)}</span></div>`).join("")}</div>
+    <span class="more"></span>
+  </summary>
+  <div class="body">
+    <div class="block"><p class="label">目標</p><p>${esc(m.goal)}</p></div>
+    <div class="block"><p class="label">本人の報告</p>${(m.report||[]).map(t=>`<p>${esc(t)}</p>`).join("")}</div>
+    <div class="fb"><p class="label">ひらちさんのフィードバック</p><ul>${(m.fb||[]).map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>
+    <div class="block"><p class="label">次にやること</p><ul>${(m.next||[]).map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>
+    ${m.note ? `<p class="note">${esc(m.note)}</p>` : ""}
+  </div>
+</details>`;
+}
+
+function monthView(){
+  const mo = MONTHS.find(x => x.id === curMonth);
+  const themes = (mo.themes||[]).map((t,i)=>`
+    <div class="theme"><div class="theme-no">${String(i+1).padStart(2,"0")}</div>
+    <div><h3>${esc(t[0])}</h3><p>${esc(t[1])}</p><p class="who">${esc(t[2])}</p></div></div>`).join("");
+  const bench = (mo.bench||[]).map(b=>
+    `<tr><td>${esc(b[0])}</td><td>${esc(b[1])}</td><td>${esc(b[2])}</td></tr>`).join("");
+  return `
+    <div id="cardArea">${mo.members.map(m => cardHTML(m, null)).join("")}</div>
+    ${themes ? `<details class="fold"><summary>${esc(mo.label)}のFBに共通するテーマ</summary><div>${themes}</div></details>` : ""}
+    ${bench ? `<details class="fold"><summary>${esc(mo.label)}に出た基準値</summary>
+      <table class="bench"><thead><tr><th>領域</th><th>指標</th><th>基準値・考え方</th></tr></thead>
+      <tbody>${bench}</tbody></table></details>` : ""}`;
+}
+
+function personView(){
+  const entries = MONTHS
+    .map(mo => ({mo, m: mo.members.find(x => x.name === curPerson)}))
+    .filter(x => x.m);
+  const latest = entries[0];
+  if(!latest) return `<div class="empty">この人の月報はまだありません。</div>`;
+  return `
+    <div class="person-head">
+      <h2>${esc(curPerson)}</h2>
+      <p>${esc(latest.m.biz)}　／　これまでの月報 ${entries.length}件</p>
+    </div>
+    <div class="timeline" id="cardArea">
+      ${entries.map(e => `<div class="tl-item"><p class="tl-month">${esc(e.mo.label)}</p>${cardHTML(e.m, null)}</div>`).join("")}
+    </div>`;
+}
+
+function renderSpine(){
+  const title = document.getElementById("spineTitle");
+  const spine = document.getElementById("spine");
+  if(mode === "month"){
+    title.textContent = "月を選ぶ";
+    spine.innerHTML = MONTHS.map(mo =>
+      `<button class="pill" data-id="${esc(mo.id)}" aria-pressed="${mo.id===curMonth}">${esc(mo.label)}<span class="n">${mo.members.length}名</span></button>`).join("");
+  }else{
+    title.textContent = "人を選ぶ";
+    spine.innerHTML = PEOPLE.map(p =>
+      `<button class="pill" data-id="${esc(p)}" aria-pressed="${p===curPerson}">${esc(p)}<span class="n">${monthCount(p)}件</span></button>`).join("");
+  }
+}
+
+function render(){
+  renderSpine();
+  document.getElementById("view").innerHTML = mode === "month" ? monthView() : personView();
+  document.getElementById("toggleAll").textContent = "すべて開く";
+  filter();
+}
+
+function filter(){
+  const t = document.getElementById("q").value.trim().toLowerCase();
+  const cards = [...document.querySelectorAll("#cardArea .card")];
+  let n = 0;
+  cards.forEach(c=>{
+    const hit = !t || c.textContent.toLowerCase().includes(t);
+    const box = c.closest(".tl-item") || c;
+    box.classList.toggle("hidden", !hit);
+    if(hit) n++;
+  });
+  const unit = mode === "month" ? "名" : "件";
+  document.getElementById("count").textContent = t ? `${n} / ${cards.length}${unit}` : `${cards.length}${unit}`;
+}
+
+document.getElementById("q").addEventListener("input", filter);
+
+document.getElementById("toggleAll").addEventListener("click", e=>{
+  const open = e.target.textContent === "すべて開く";
+  document.querySelectorAll("#cardArea .card").forEach(c => c.open = open);
+  e.target.textContent = open ? "すべて閉じる" : "すべて開く";
+});
+
+document.getElementById("spine").addEventListener("click", e=>{
+  const b = e.target.closest(".pill");
+  if(!b) return;
+  if(mode === "month") curMonth = b.dataset.id; else curPerson = b.dataset.id;
+  render();
+});
+
+document.querySelectorAll(".mode").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    mode = btn.dataset.mode;
+    document.querySelectorAll(".mode").forEach(b => b.setAttribute("aria-selected", String(b === btn)));
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
